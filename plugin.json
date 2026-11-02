@@ -4,8 +4,11 @@
   "version": "1.1.0",
   "description": "Build isolated Elementor extension plugins for existing WordPress sites without replacing the active theme or page builder.",
   "author": {
-    "name": "Elementor Extension Builder Skill contributors"
+    "name": "Syed Musaib Jeelani",
+    "url": "https://github.com/musaibjeelani"
   },
+  "homepage": "https://github.com/musaibjeelani/elementor-extension-builder",
+  "repository": "https://github.com/musaibjeelani/elementor-extension-builder",
   "license": "MIT",
   "keywords": [
     "wordpress",
@@ -20,7 +23,7 @@
         "displayName": "Elementor Extension Builder",
         "shortDescription": "Build isolated Elementor plugins for existing sites",
         "longDescription": "Turn supplied designs into reusable Elementor widgets and project-specific WordPress plugins while preserving the existing theme, builder, content, and third-party plugins.",
-        "developerName": "Elementor Extension Builder Skill contributors",
+        "developerName": "Syed Musaib Jeelani",
         "defaultPrompt": [
           "Use Elementor Extension Builder to integrate this design into my existing Elementor website as an isolated custom plugin."
         ],
