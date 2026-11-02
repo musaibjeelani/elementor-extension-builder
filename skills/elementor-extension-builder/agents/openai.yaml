@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elementor Extension Builder"
+  short_description: "Build isolated Elementor plugins for existing sites"
+  default_prompt: "Use $elementor-extension-builder to add this design or component to my existing Elementor site without replacing its theme or builder."

@@ -1,0 +1,16 @@
+{
+  "name": "elementor-extension-builder",
+  "displayName": "Elementor Extension Builder",
+  "description": "Build isolated Elementor extension plugins for existing WordPress sites without replacing the active theme or page builder.",
+  "version": "1.1.0",
+  "author": {
+    "name": "Elementor Extension Builder Skill contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "wordpress",
+    "elementor",
+    "wordpress-plugin",
+    "web-development"
+  ]
+}
