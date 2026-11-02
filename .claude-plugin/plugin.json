@@ -4,8 +4,11 @@
   "description": "Build isolated Elementor extension plugins for existing WordPress sites without replacing the active theme or page builder.",
   "version": "1.1.0",
   "author": {
-    "name": "Elementor Extension Builder Skill contributors"
+    "name": "Syed Musaib Jeelani",
+    "url": "https://github.com/musaibjeelani"
   },
+  "homepage": "https://github.com/musaibjeelani/elementor-extension-builder",
+  "repository": "https://github.com/musaibjeelani/elementor-extension-builder",
   "license": "MIT",
   "keywords": [
     "wordpress",

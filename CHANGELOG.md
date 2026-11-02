@@ -4,6 +4,18 @@ All notable changes to this skill are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and releases use [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Reorganized the README around installation, operation, expected output, and contribution workflows.
+- Moved host-specific validation instructions into the contributor documentation and clarified that they are not runtime dependencies.
+- Replaced publishing placeholders with the public repository URL and maintainer metadata.
+
+### Added
+
+- Repository ownership and pull request templates for a maintainer-reviewed contribution workflow.
+
 ## [1.1.0] - 2026-10-30
 
 ### Added

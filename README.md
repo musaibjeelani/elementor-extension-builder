@@ -1,174 +1,163 @@
 # Elementor Extension Builder
 
-A portable AI-agent plugin for building project-specific WordPress Elementor extensions without replacing an existing site's theme or page builder.
+Elementor Extension Builder is a reusable AI-agent skill for adding project-specific designs and functionality to an existing WordPress Elementor website as an isolated custom plugin.
 
-It packages one reusable skill for:
+It helps an agent inspect the current site, convert supplied designs into editable Elementor components, preserve the active theme and existing pages, and package the result for predictable deployment.
 
-- ChatGPT and Codex through the Agent Plugins format;
-- Claude Code through its compatible plugin and marketplace manifests;
-- direct standalone skill installation when a full plugin marketplace is not needed.
+> This repository is an agent skill, not a universal WordPress plugin. It teaches the coding agent how to build the correct plugin for each website.
 
-> This repository does not contain a universal WordPress plugin. It gives the coding agent a production-oriented workflow for inspecting each website and creating the correct isolated WordPress plugin for that project.
+## What it is designed for
 
-## What the skill helps build
+- Converting HTML, CSS, JavaScript, screenshots, or design references into reusable Elementor widgets
+- Adding editable content, repeater, style, responsive, link, and animation controls
+- Building Elementor Theme Builder-compatible headers and footers
+- Supporting internal page, post, and public custom-post-type links plus optional external URLs
+- Adding loaders, sticky navigation, sliders, tabs, menus, testimonials, and dynamic content grids
+- Isolating CSS from Elementor Kit and inline-style conflicts
+- Keeping JavaScript safe across Elementor frontend and editor rerenders
+- Supporting WPML-managed fields, translated content, links, and language switchers
+- Creating environment-safe setup and upgrade routines without hardcoded page or template IDs
 
-- Reusable Elementor widgets for new page sections
-- Elementor content, repeater, style, responsive, and animation controls
-- Page, post, and public custom-post-type link selection
-- Optional external URLs with target and relationship settings
-- Elementor Theme Builder-compatible headers and footers
-- Loaders, progress indicators, sticky navigation, and other global behavior
-- Dynamic post queries, tabs, sliders, menus, testimonials, and content grids
-- Scoped CSS resistant to Elementor Kit and inline-style conflicts
-- Idempotent JavaScript compatible with Elementor frontend and editor rendering
-- WPML-ready fields, templates, translated links, and language switchers
-- Safe activation, versioned upgrades, template seeding, and production packaging
+## What it does not do
+
+- It does not replace Elementor, the active theme, or existing page content automatically.
+- It does not provide one generic WordPress plugin that fits every website.
+- It does not make production assignments or publish content unless the user explicitly requests those actions.
+- It does not require an MCP server. The package is a skills-only plugin.
+
+## How it works
+
+```text
+Existing WordPress + Elementor site
+                |
+                v
+Agent inspects the theme, plugins, templates, content model, and design reference
+                |
+                v
+Agent chooses the least invasive implementation
+                |
+                +--> Reusable sections: custom Elementor widgets
+                +--> Header/footer: Theme Builder templates when available
+                +--> Global behavior: isolated plugin hooks and settings
+                |
+                v
+Agent builds and verifies one project-specific WordPress plugin
+                |
+                v
+Developer installs the generated plugin and assigns widgets/templates as documented
+```
+
+The workflow keeps every generated WordPress plugin client-specific. This public repository contains only generic implementation guidance.
 
 ## Supported hosts
 
-| Host | Supported | Invocation |
+| Host | Support | Invocation |
 | --- | --- | --- |
-| Codex | Yes | `$elementor-extension-builder` |
-| ChatGPT with local Codex execution | Yes | Select the installed plugin/skill, then describe the task |
+| ChatGPT desktop / Codex | Yes | `$elementor-extension-builder` |
 | Claude Code | Yes | `/elementor-extension-builder:elementor-extension-builder` |
-| Other Agent Skills-compatible hosts | Usually | Install the folder under `skills/elementor-extension-builder/`; host-specific metadata may be ignored |
-
-The core workflow is provider-neutral. `agents/openai.yaml`, root `plugin.json`, and `.claude-plugin/plugin.json` provide host-specific discovery and presentation metadata without duplicating the skill instructions.
+| Agent Skills-compatible hosts | Usually | Install `skills/elementor-extension-builder/` using the host's skill mechanism |
 
 ## Requirements
 
 - A local coding-agent environment with filesystem and command execution access
 - An accessible WordPress project using Elementor
 - A design reference, screenshots, HTML/CSS/JS files, or a written component specification
-- Elementor Pro only when requested features require Pro functionality such as Theme Builder
+- Elementor Pro only when the requested implementation needs Pro features such as Theme Builder
 - WPML only when multilingual behavior is required
 
-This package is marked desktop-only for OpenAI because its core workflow inspects and modifies local project files.
+The OpenAI manifest marks this package as desktop-only because the workflow must inspect and modify local project files.
 
-## Repository structure
+## Install in ChatGPT desktop or Codex
 
-```text
-elementor-extension-builder/
-├── plugin.json
-├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
-├── skills/
-│   └── elementor-extension-builder/
-│       ├── SKILL.md
-│       ├── agents/
-│       │   └── openai.yaml
-│       └── references/
-│           ├── architecture.md
-│           ├── elementor-implementation.md
-│           └── validation-and-deployment.md
-├── README.md
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── LICENSE
-└── .gitignore
-```
-
-## Install in Codex
-
-### Plugin marketplace installation
-
-After publishing this folder to GitHub, replace `OWNER/REPOSITORY` below:
+Add this repository as a plugin marketplace:
 
 ```bash
-codex plugin marketplace add OWNER/REPOSITORY
+codex plugin marketplace add musaibjeelani/elementor-extension-builder
 ```
 
-Restart the ChatGPT desktop app, open the Plugins Directory, choose the added marketplace, and install **Elementor Extension Builder**.
+Restart the ChatGPT desktop app, open the Plugins Directory, select the `elementor-extension-tools` marketplace, and install **Elementor Extension Builder**.
 
-### Standalone skill installation
+Start a new chat after installation.
 
-Users who only want the skill can copy this directory:
+## Install as a standalone Codex skill
 
-```text
-skills/elementor-extension-builder
+Clone the repository:
+
+```bash
+git clone https://github.com/musaibjeelani/elementor-extension-builder.git
 ```
 
-to:
+Copy `skills/elementor-extension-builder/` into:
 
 ```text
 ~/.codex/skills/elementor-extension-builder
 ```
 
-For a Git checkout on Windows PowerShell:
+Windows PowerShell example:
 
 ```powershell
-git clone YOUR_REPOSITORY_URL elementor-extension-builder-source
-$skillDestination = Join-Path $HOME '.codex\skills\elementor-extension-builder'
-New-Item -ItemType Directory -Force -Path (Split-Path $skillDestination) | Out-Null
-Copy-Item -Recurse '.\elementor-extension-builder-source\skills\elementor-extension-builder' $skillDestination
+git clone https://github.com/musaibjeelani/elementor-extension-builder.git elementor-extension-builder-source
+$destination = Join-Path $HOME '.codex\skills\elementor-extension-builder'
+New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
+Copy-Item -Recurse -Force '.\elementor-extension-builder-source\skills\elementor-extension-builder' $destination
 ```
 
-Open a new Codex chat after installation.
+Start a new Codex chat after copying the skill.
 
 ## Install in Claude Code
 
-### Install through the bundled marketplace
-
-Replace `OWNER/REPOSITORY` with the GitHub shorthand:
+Add the bundled marketplace and install the plugin:
 
 ```bash
-claude plugin marketplace add OWNER/REPOSITORY
+claude plugin marketplace add musaibjeelani/elementor-extension-builder
 claude plugin install elementor-extension-builder@elementor-extension-tools
 ```
 
-Or install from inside Claude Code:
+Start a new Claude Code session, then invoke the skill with:
 
 ```text
-/plugin install elementor-extension-builder --marketplace OWNER/REPOSITORY
+/elementor-extension-builder:elementor-extension-builder
 ```
 
-### Test a local checkout without installing
+To test a local checkout without installing it:
 
 ```bash
 claude --plugin-dir ./elementor-extension-builder
 ```
 
-Inside Claude Code, invoke the skill with:
-
-```text
-/elementor-extension-builder:elementor-extension-builder
-```
-
-Claude can also select the skill automatically when the request matches its description.
-
 ## Use the skill
 
-### Codex prompt
+### ChatGPT desktop or Codex
 
 ```text
-Use $elementor-extension-builder to integrate the supplied design into my existing Elementor website as a separate custom plugin. Preserve the current theme, Elementor pages, and third-party plugins.
+Use $elementor-extension-builder to integrate the supplied design into my existing Elementor website as a separate custom plugin. Preserve the current theme, Elementor pages, and unrelated plugins.
 ```
 
-### Claude Code prompt
+### Claude Code
 
 ```text
 /elementor-extension-builder:elementor-extension-builder
 
-Integrate the supplied design into my existing Elementor website as a separate custom plugin. Preserve the current theme, Elementor pages, and third-party plugins.
+Integrate the supplied design into my existing Elementor website as a separate custom plugin. Preserve the current theme, Elementor pages, and unrelated plugins.
 ```
 
-Provide as much of the following as is available:
+Provide the information that is available:
 
-- local WordPress project path or repository;
-- design URL, design files, screenshots, or HTML/CSS/JS reference;
+- local WordPress project or repository path;
+- design URL, local design files, screenshots, or HTML/CSS/JS reference;
 - pages and global templates that must change;
-- required Elementor fields and dynamic content sources;
-- supported devices and browsers;
+- required editable fields and dynamic content sources;
+- supported viewport sizes and browsers;
 - whether Elementor Pro, WPML, ACF, or custom post types are active;
-- whether the agent should only build widgets or also create and assign draft templates;
-- staging URL and access only when browser verification is requested.
+- whether the agent should only build widgets or also create draft templates;
+- staging access only when browser verification is required.
 
-### Example: new page components
+## Example requests
+
+### Build reusable page sections
 
 ```text
-Use the Elementor Extension Builder skill for this existing Elementor site.
+Use $elementor-extension-builder for this existing Elementor site.
 
 Project: D:\sites\client-wordpress
 Reference design: D:\designs\homepage-v2
@@ -176,106 +165,66 @@ Reference design: D:\designs\homepage-v2
 Build the hero, services, testimonials, and contact sections as reusable Elementor widgets. Make text, images, colors, spacing, tabs, and links editable. Internal links must support pages, posts, and public custom post types, with an optional external URL mode. Package everything as one installable WordPress plugin and do not modify the active theme.
 ```
 
-### Example: global templates and WPML
+### Add global templates and multilingual behavior
 
 ```text
-Use the Elementor Extension Builder skill to create a plugin-owned header, mega menu, footer, and loader for this existing Elementor Pro website. Keep visible content editable through Elementor templates, support WPML translations, use current WPML language-switcher output, and avoid hardcoded template or page IDs between staging and production.
+Use $elementor-extension-builder to create a plugin-owned header, mega menu, footer, and loader for this existing Elementor Pro website. Keep visible content editable through Elementor templates, support WPML translations, use WPML's language-switcher output, and avoid hardcoded template or page IDs between staging and production.
 ```
 
-### Example: update an existing generated plugin
+### Update an existing generated plugin
 
 ```text
-Use the Elementor Extension Builder skill to compare the updated design with the current custom Elementor plugin. Implement only changed components. Preserve editor-modified content, run a versioned idempotent upgrade, and verify that no duplicate pages, templates, menus, or widgets are created.
+Use $elementor-extension-builder to compare the updated design with the current custom Elementor plugin. Implement only changed components, preserve editor-modified content, run a versioned idempotent upgrade, and verify that no duplicate pages, templates, menus, or widgets are created.
 ```
 
-## Expected workflow
+## Expected output
 
-1. Inspect repository instructions, WordPress setup, Elementor versions, theme/templates, post types, global styles, and existing custom code.
-2. Compare every component and state against the supplied reference at representative viewport sizes.
-3. Decide which features belong in widgets, Theme Builder templates, plugin hooks, or plugin settings.
-4. Implement a uniquely prefixed and scoped custom WordPress plugin.
-5. Add Elementor controls, dynamic links, accessibility, responsive states, animations, WPML support, and safe upgrades as required.
-6. Run syntax, editor, frontend, responsive, visual, multilingual, and upgrade checks.
-7. Deliver the WordPress plugin folder or ZIP with deployment and assignment instructions.
+The agent should provide:
 
-## Validate
+- a self-contained project-specific WordPress plugin folder or ZIP;
+- reusable Elementor widgets and controls requested by the design;
+- bundled and scoped frontend assets;
+- safe activation and upgrade behavior where setup is required;
+- validation results covering syntax, editor behavior, frontend states, responsiveness, links, accessibility, and multilingual behavior as applicable;
+- concise installation, assignment, cache-clear, and deployment instructions.
 
-### Validate the skill for Codex
+Activation alone does not replace production pages unless the generated plugin deliberately implements and verifies that assignment.
 
-Use the validator bundled with Codex's `skill-creator` skill:
+## Repository structure
 
 ```text
-python <codex-skills>/.system/skill-creator/scripts/quick_validate.py ./skills/elementor-extension-builder
+elementor-extension-builder/
+|-- plugin.json
+|-- .claude-plugin/
+|   |-- plugin.json
+|   `-- marketplace.json
+|-- skills/
+|   `-- elementor-extension-builder/
+|       |-- SKILL.md
+|       |-- agents/
+|       |   `-- openai.yaml
+|       `-- references/
+|           |-- architecture.md
+|           |-- elementor-implementation.md
+|           `-- validation-and-deployment.md
+|-- .github/
+|   |-- CODEOWNERS
+|   `-- PULL_REQUEST_TEMPLATE.md
+|-- CHANGELOG.md
+|-- CONTRIBUTING.md
+|-- SECURITY.md
+`-- LICENSE
 ```
 
-The validator requires PyYAML:
+## Contributing
 
-```text
-python -m pip install PyYAML
-```
+Suggestions and improvements are welcome through GitHub Issues and pull requests. Fork the repository, create a focused branch, make a generic change that does not expose client information, and open a pull request.
 
-### Validate the Claude plugin
+Contributor setup, validation, and release guidance belong in [CONTRIBUTING.md](CONTRIBUTING.md). End users do not need Codex's `skill-creator` validator or Claude's plugin validator to install and use this skill.
 
-With Claude Code installed:
+## Security and privacy
 
-```bash
-claude plugin validate --strict .
-```
-
-Then run a clean local session:
-
-```bash
-claude --plugin-dir .
-```
-
-## Publish on GitHub
-
-Before the first public release, replace the generic contributor name in both manifests with your name or organization. Add final `homepage` and `repository` URLs after the GitHub repository exists.
-
-From this folder:
-
-```bash
-git init
-git add .
-git commit -m "feat: publish cross-platform Elementor extension skill"
-git branch -M main
-git remote add origin YOUR_REPOSITORY_URL
-git push -u origin main
-git tag -a v1.1.0 -m "Release 1.1.0"
-git push origin v1.1.0
-```
-
-Recommended GitHub topics:
-
-```text
-agent-skills, codex-skill, claude-code-plugin, wordpress, elementor, wordpress-plugin, wpml
-```
-
-## Publish to plugin directories
-
-### OpenAI Plugin Directory
-
-1. ZIP the repository with `plugin.json` at the archive root or inside its single top-level folder.
-2. Open the OpenAI Plugins dashboard and create a skills-only submission.
-3. Upload the ZIP, resolve automated findings, complete verified developer metadata, and submit for review.
-4. Because the workflow needs local project access, keep `requires_local_executor` enabled and follow the desktop-only submission requirements.
-
-### Anthropic directory
-
-1. Run `claude plugin validate --strict .`.
-2. Push the plugin to a public GitHub repository.
-3. Open Anthropic's plugin directory developer portal with an eligible paid Claude plan.
-4. Submit the repository and resolve review findings.
-
-The included `.claude-plugin/marketplace.json` also lets users install directly from your GitHub repository without waiting for directory approval.
-
-## Scope and limitations
-
-- Generated WordPress plugins remain project-specific and require testing on the target website.
-- Activation does not automatically replace live pages unless the implementation explicitly assigns and verifies page/template conditions.
-- Elementor Pro, WPML, ACF, and similar plugins are optional dependencies only when requested functionality needs them.
-- Host-specific metadata or invocation syntax may differ, but the core `SKILL.md` workflow stays the same.
-- Never commit client credentials, database dumps, private design assets, production URLs, or client-specific generated plugins to this public repository.
+Never include client credentials, database dumps, private designs, production secrets, environment-specific IDs, or generated client plugins in a public issue or pull request. See [SECURITY.md](SECURITY.md) for private vulnerability reporting guidance.
 
 ## License
 
